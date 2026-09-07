@@ -134,6 +134,8 @@ header.scrolled{background:rgba(255,255,255,.82);backdrop-filter:blur(14px);-web
 .stage-pill.show{opacity:1;transform:translateY(0)}
 .pill-tl{top:16%;left:0}
 .pill-br{bottom:14%;right:0}
+.stage-pill{transition:opacity .45s .25s,transform .45s .25s,top .4s,bottom .4s}
+.phone-stage .screen[data-panel="2"]{width:min(330px,76%)}
 .app-copy .eyebrow{margin-bottom:16px}
 .app-copy h2{font-size:clamp(28px,3.2vw,40px)}
 .app-copy .desc{margin-top:18px;font-size:16.5px;line-height:1.7;color:var(--body);max-width:460px}
@@ -376,7 +378,7 @@ footer{padding:56px 0 44px}
       <div class="phone-stage" id="stage">
         <img class="screen active" data-panel="0" src="assets/phone-dashboard.webp" alt="Heute-Dashboard der HausmeisterPro App">
         <img class="screen" data-panel="1" src="assets/phone-aufgaben.webp" alt="Aufgaben und Turnusse mit Checkliste" loading="lazy">
-        <img class="screen" data-panel="2" src="assets/phone-foto.webp" alt="Foto-Nachweis mit Zeitstempel" loading="lazy">
+        <img class="screen" data-panel="2" src="assets/phone-foto.webp?v=2" alt="Foto-Nachweis mit Zeitstempel" loading="lazy">
         <img class="screen" data-panel="3" src="assets/phone-notizen.webp" alt="Notizen mit automatischer Übersetzung" loading="lazy">
         <div class="stage-pill pill-tl"><span class="callout-pill" id="pill-a">Fortschritt <span class="plus">+</span></span></div>
         <div class="stage-pill pill-br"><span class="callout-pill" id="pill-b">Fällige Aufgaben <span class="plus">+</span></span></div>
@@ -419,7 +421,7 @@ footer{padding:56px 0 44px}
       <p class="lead">Kennzahlen, Reinigungen, Auslastung und Status fließen zu einem klaren Bild zusammen – alles Wichtige sofort sichtbar. Qualität wird endlich messbar.</p>
     </div>
     <div class="portal-visual reveal">
-      <img src="assets/macbook-dashboard.webp" alt="HausmeisterPro Reporting-Portal – Verwaltungs-Dashboard auf dem MacBook" loading="lazy">
+      <img src="assets/macbook-dashboard.webp?v=2" alt="HausmeisterPro Reporting-Portal – Verwaltungs-Dashboard auf dem MacBook" loading="lazy">
     </div>
     <div class="portal-grid">
       <div class="pcard reveal">
@@ -564,16 +566,16 @@ kio.observe(document.querySelector('.kpis'));
 const panels=[
   {title:'Heute-Dashboard',desc:'Der Arbeitstag auf einen Blick: fällige Aufgaben, Objekte und Fortschritt – ohne langes Suchen.',
    points:['Alle Objekte und offenen Aufgaben des Tages','Wochen-Statistik: erledigte Aufgaben im Blick','Filter für Heute, 7 Tage und 30 Tage'],
-   pillA:'Fortschritt',pillB:'Fällige Aufgaben'},
+   pillA:'Fortschritt',pillB:'Fällige Aufgaben',posA:{top:'16%'},posB:{bottom:'14%'}},
   {title:'Aufgaben & Turnusse',desc:'Jede Reinigung als abhakbare Checkliste pro Objekt – mit Foto-Nachweis direkt am Punkt. Farbige Status trennen geplante, anstehende und überfällige Turnusse: nichts geht unter.',
    points:['Unterpunkte mit Fortschrittsanzeige','Wiederkehrende Turnusse automatisch geplant','Foto-Pflicht pro Unterpunkt konfigurierbar'],
-   pillA:'Turnus-Liste',pillB:'Status-Leiste'},
+   pillA:'Turnus-Liste',pillB:'Status-Leiste',posA:{top:'16%'},posB:{bottom:'12%'}},
   {title:'Foto-Nachweis',desc:'Aufgabe erledigt? Foto aufnehmen, prüfen, fertig – automatisch mit Zeitstempel und Objekt verknüpft.',
    points:['Zeitstempel & Objekt automatisch angehängt','Nachweise landen sofort im Portal','Bestätigen & abhaken in einem Schritt'],
-   pillA:'Foto aufnehmen',pillB:'Nachweis im Portal'},
+   pillA:'Foto aufnehmen',pillB:'Nachweis im Portal',posA:{top:'22%'},posB:{bottom:'2%'}},
   {title:'Notizen in jeder Sprache',desc:'Hinweise in der eigenen Sprache erfassen – automatisch für die Objektleitung übersetzt. Nichts geht mehr zwischen Sprachen verloren.',
    points:['Automatische Übersetzung, z. B. Polnisch → Deutsch','Original und Übersetzung nebeneinander','Direkt am Objekt und an der Aufgabe'],
-   pillA:'Notiz erfassen',pillB:'Automatische Übersetzung'}
+   pillA:'Notiz erfassen',pillB:'Automatische Übersetzung',posA:{top:'16%'},posB:{bottom:'6%'}}
 ];
 const tabs=document.querySelectorAll('.app-tab');
 const screens=document.querySelectorAll('.phone-stage .screen');
@@ -587,6 +589,9 @@ function setPanel(i){
   document.getElementById('ac-points').innerHTML=p.points.map(pt=>`<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#EAF1FF"/><path d="m8 12.2 2.6 2.6 5-5.2" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>${pt}</li>`).join('');
   document.getElementById('pill-a').innerHTML=`${p.pillA} <span class="plus">+</span>`;
   document.getElementById('pill-b').innerHTML=`${p.pillB} <span class="plus">+</span>`;
+  const tl=document.querySelector('.pill-tl'), br=document.querySelector('.pill-br');
+  tl.style.top=(p.posA&&p.posA.top)||'16%';
+  br.style.bottom=(p.posB&&p.posB.bottom)||'14%';
   pills.forEach(pl=>{pl.classList.remove('show');void pl.offsetWidth;pl.classList.add('show')});
 }
 tabs.forEach(t=>t.addEventListener('click',()=>setPanel(+t.dataset.tab)));
